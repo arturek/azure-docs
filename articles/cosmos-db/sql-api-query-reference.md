@@ -273,11 +273,9 @@ Let's look at the following FROM clause: `<from_source1> JOIN <from_source2> JOI
   
 **Example 3** - 3 sources  
   
-- Let <from_source1> be container-scoped and represent set {A, B, C}.  
-  
 - Let `<from_source1>` be container-scoped and represent set {A, B, C}.  
   
-- Let <from_source2> be document-scoped referencing input_alias1 and represent sets:  
+- Let `<from_source2>` be document-scoped referencing input_alias1 and represent sets:  
   
     {1, 2} for `input_alias1 = A,`  
   
@@ -616,7 +614,7 @@ ORDER BY <sort_specification>
 |-|-|-|  
 |\\'|apostrophe (')|U+0027|  
 |\\"|quotation mark (")|U+0022|  
-|\\\|reverse solidus (\\)|U+005C|  
+|\\\\ |reverse solidus (\\)|U+005C|  
 |\\/|solidus (/)|U+002F|  
 |\b|backspace|U+0008|  
 |\f|form feed|U+000C|  
@@ -1555,7 +1553,7 @@ SELECT
  Here is the result set.  
   
 ```  
-[{$1: false, $2: false, $3: false, $4: false, $5: false, $6: true}]  
+[{"$1": false, "$2": false, "$3": false, "$4": false, "$5": false, "$6": true, "$7": false}]  
 ```  
   
 ####  <a name="bk_is_bool"></a> IS_BOOL  
@@ -1595,7 +1593,7 @@ SELECT
  Here is the result set.  
   
 ```  
-[{$1: true, $2: false, $3: false, $4: false, $5: false, $6: false}]  
+[{"$1": true, "$2": false, "$3": false, "$4": false, "$5": false, "$6": false, "$7": false}]  
 ```  
   
 ####  <a name="bk_is_defined"></a> IS_DEFINED  
@@ -1671,7 +1669,7 @@ SELECT
  Here is the result set.  
   
 ```  
-[{$1: false, $2: false, $3: false, $4: true, $5: false, $6: false}]  
+[{"$1": false, "$2": false, "$3": false, "$4": true, "$5": false, "$6": false, "$7": false}]  
 ```  
   
 ####  <a name="bk_is_number"></a> IS_NUMBER  
@@ -1711,7 +1709,7 @@ SELECT
  Here is the result set.  
   
 ```  
-[{$1: false, $2: true, $3: false, $4: false, $5: false, $6: false}]  
+[{"$1": false, "$2": true, "$3": false, "$4": false, "$5": false, "$6": false, "$7": false}]  
 ```  
   
 ####  <a name="bk_is_object"></a> IS_OBJECT  
@@ -1751,7 +1749,7 @@ SELECT
  Here is the result set.  
   
 ```  
-[{$1: false, $2: false, $3: false, $4: false, $5: true, $6: false}]  
+[{"$1": false, "$2": false, "$3": false, "$4": false, "$5": true, "$6": false, "$7": false}]  
 ```  
   
 ####  <a name="bk_is_primitive"></a> IS_PRIMITIVE  
@@ -1831,7 +1829,7 @@ SELECT
  Here is the result set.  
   
 ```  
-[{$1: false, $2: false, $3: true, $4: false, $5: false, $6: false}]  
+[{"$1": false, "$2": false, "$3": true, "$4": false, "$5": false, "$6": false, "$7": false}]  
 ```  
   
 ###  <a name="bk_string_functions"></a> String functions  
@@ -2382,7 +2380,7 @@ ToString(<expr>)
   
 ```  
 SELECT ToString(1.0000), ToString("Hello World"), ToString(NaN), ToString(Infinity),
-ToString(IS_STRING(ToString(undefined))), IS_STRING(ToString(0.1234), ToString(false), ToString(undefined))
+ToString(IS_STRING(ToString(undefined))), IS_STRING(ToString(0.1234)), ToString(false), ToString(undefined)
 ```  
   
  Here is the result set.  
@@ -2862,7 +2860,7 @@ SELECT ST_ISVALID({ "type": "Point", "coordinates": [31.9, -132.8] })
  **Syntax**  
   
 ```  
-ST_ISVALID(<spatial_expr>)  
+ST_ISVALIDDETAILED(<spatial_expr>)  
 ```  
   
  **Arguments**  
