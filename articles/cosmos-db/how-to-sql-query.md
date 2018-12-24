@@ -397,7 +397,7 @@ In addition to binary and unary operators, property references are also allowed.
 
 ### Equality and comparison operators
 
-The following table shows the result of equality comparisons in the SQL API between any two JSON types.
+The following table shows the result of equality comparisons (= and !=) in the SQL API between any two JSON types.
 
 | **Op** | **Undefined** | **Null** | **Boolean** | **Number** | **String** | **Object** | **Array** |
 |---|---|---|---|---|---|---|---|
@@ -409,7 +409,7 @@ The following table shows the result of equality comparisons in the SQL API betw
 | **Object** | Undefined | Undefined | Undefined | Undefined | Undefined | **Ok** | Undefined |
 | **Array** | Undefined | Undefined | Undefined | Undefined | Undefined | Undefined | **Ok** |
 
-For other comparison operators such as >, >=, !=, <, and <=, the following rules apply:
+For other comparison operators such as >, >=, <, and <=, the following rules apply:
 
 * Comparison across types results in Undefined.  
 * Comparison between two objects or two arrays results in Undefined.
@@ -1018,8 +1018,7 @@ The following examples show how the JOIN clause works. In the following example,
 **Results**
 
 ```json
-    [{
-    }]
+    []
 ```
 
 In the following example, the join is between the item root and the `children` subroot. It's a cross product between two JSON objects. The fact that children is an array is not effective in the JOIN since we are dealing with a single root that is the children array. Hence the result contains only two results, since the cross product of each item with the array yields exactly only one item.
@@ -1166,7 +1165,7 @@ In the next example, there is an additional filter on `pet`, which excludes all 
 
 ## <a id="JavaScriptIntegration"></a>JavaScript integration
 
-Azure Cosmos DB provides a programming model for executing JavaScript based application logic directly on the containers in terms of stored procedures and triggers, this method allows supports:
+Azure Cosmos DB provides a programming model for executing JavaScript based application logic directly on the containers in terms of stored procedures and triggers, this method supports:
 
 * Ability to do high-performance transactional CRUD operations and queries against items in a container by virtue of the deep integration of JavaScript runtime directly within the database engine.
 * A natural modeling of control flow, variable scoping, and assignment and integration of exception handling primitives with database transactions. For more details about Azure Cosmos DB support for JavaScript integration, see the JavaScript server-side programmability documentation.
@@ -1635,6 +1634,7 @@ The mapping between .NET objects and JSON items is natural - each data member fi
         public Parent[] parents;
         public Child[] children;
         public bool isRegistered;
+        public Address address;
     };
 
     public struct Parent
@@ -1868,13 +1868,13 @@ The syntax is `input(.|.SelectMany())(.Select()|.Where())*`. A concatenated quer
 
 ```csharp
     input.Select(family=>family.parents[0])
-        .Where(familyName == "Smith");
+        .Where(family=>family.familyName == "Smith");
 ```
 
 **SQL**
 
 ```sql
-    SELECT *
+    SELECT VALUE f.parents[0]
     FROM Families f
     WHERE f.parents[0].familyName = "Smith"
 ```
@@ -1904,7 +1904,7 @@ The syntax is `input(.|.SelectMany())(.Select()|.Where())*`. A concatenated quer
 **SQL**
 
 ```sql
-    SELECT *
+    SELECT f.children[0].grade
     FROM Families f
     WHERE ({grade: f.children[0].grade}.grade > 3)
 ```
@@ -1913,7 +1913,7 @@ The syntax is `input(.|.SelectMany())(.Select()|.Where())*`. A concatenated quer
 
 ```csharp
     input.SelectMany(family => family.parents)
-        .Where(parent => parents.familyName == "Smith");
+        .Where(parent => parent.familyName == "Smith");
 ```
 
 **SQL**
